@@ -2,9 +2,10 @@ import React from 'react';
 
 interface DashboardProps {
   searchTerm: string;
+  onNavigateToPage: (pageName: string) => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ searchTerm }) => {
+const Dashboard: React.FC<DashboardProps> = ({ searchTerm, onNavigateToPage }) => {
   const stats = [
     {
       title: 'Total Revenue',
@@ -72,22 +73,26 @@ const Dashboard: React.FC<DashboardProps> = ({ searchTerm }) => {
     {
       icon: 'fas fa-box',
       title: 'Add Product',
-      description: 'Create new product listing'
+      description: 'Create new product listing',
+      navigateTo: 'products'
     },
     {
       icon: 'fas fa-users',
       title: 'View Customers',
-      description: 'Manage customer data'
+      description: 'Manage customer data',
+      navigateTo: 'customers'
     },
     {
       icon: 'fas fa-shopping-cart',
       title: 'Process Orders',
-      description: 'Handle pending orders'
+      description: 'Handle pending orders',
+      navigateTo: 'orders'
     },
     {
       icon: 'fas fa-chart-line',
       title: 'View Analytics',
-      description: 'Check performance metrics'
+      description: 'Check performance metrics',
+      navigateTo: 'analytics'
     }
   ];
 
@@ -161,7 +166,18 @@ const Dashboard: React.FC<DashboardProps> = ({ searchTerm }) => {
           <div className="p-5">
             <div className="grid grid-cols-2 gap-4">
               {filteredActions.map((action, index) => (
-                <div key={index} className="text-center p-6 border-2 border-dashed border-gray-300 rounded-lg transition-all duration-300 cursor-pointer hover:border-primary-500 hover:bg-primary-50 h-full">
+                <div
+                  key={index}
+                  className="text-center p-6 border-2 border-dashed border-gray-300 rounded-lg transition-all duration-300 cursor-pointer hover:border-primary-500 hover:bg-primary-50 h-full"
+                  onClick={() => onNavigateToPage((action as any).navigateTo)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      onNavigateToPage((action as any).navigateTo);
+                    }
+                  }}
+                >
                   <i className={`${action.icon} text-3xl text-primary-500 mb-3`}></i>
                   <h6 className="font-semibold text-gray-900 mb-2">{action.title}</h6>
                   <p className="text-sm text-gray-600 m-0">{action.description}</p>

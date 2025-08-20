@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Custom Properties for Theming */
+:root {
+  /* Default theme colors - will be overridden by ThemeContext */
+  --color-primary-50: #f0f1f4;
+  --color-primary-100: #e1e3e9;
+  --color-primary-200: #c3c7d3;
+  --color-primary-300: #a5abbd;
+  --color-primary-400: #878fa7;
+  --color-primary-500: #262B50;
+  --color-primary-600: #1e223f;
+  --color-primary-700: #161a2e;
+  --color-primary-800: #0f111d;
+  --color-primary-900: #07080b;
+  
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f9fafb;
+  --color-background-tertiary: #f3f4f6;
+  
+  --color-text-primary: #111827;
+  --color-text-secondary: #374151;
+  --color-text-muted: #6b7280;
+  
+  --color-border-primary: #d1d5db;
+  --color-border-secondary: #e5e7eb;
+}
+
 /* Custom component styles that can't be easily replicated with Tailwind */
 @layer components {
   .stat-icon {
@@ -9,19 +35,31 @@
   }
   
   .card {
-    @apply bg-white rounded-card border border-gray-200 shadow-card;
+    background-color: var(--color-background-primary);
+    border: 1px solid var(--color-border-primary);
+    @apply rounded-card shadow-card;
   }
   
   .btn-primary {
-    @apply px-4 sm:px-6 py-2.5 sm:py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors text-sm font-medium;
+    background-color: var(--color-primary-500);
+    color: white;
+    @apply px-4 sm:px-6 py-2.5 sm:py-2 rounded-lg hover:bg-opacity-90 transition-colors text-sm font-medium;
   }
   
   .btn-secondary {
-    @apply px-4 sm:px-6 py-2.5 sm:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium;
+    border: 1px solid var(--color-border-primary);
+    color: var(--color-text-secondary);
+    @apply px-4 sm:px-6 py-2.5 sm:py-2 rounded-lg hover:bg-opacity-5 hover:bg-gray-500 transition-colors text-sm font-medium;
   }
   
   .input-field {
-    @apply w-full px-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm;
+    border: 1px solid var(--color-border-primary);
+    @apply w-full px-3 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-opacity-50 text-sm;
+  }
+  
+  .input-field:focus {
+    --tw-ring-color: var(--color-primary-500);
+    border-color: var(--color-primary-500);
   }
   
   .table-responsive {
@@ -29,7 +67,8 @@
   }
   
   .table-responsive table {
-    @apply min-w-full divide-y divide-gray-200;
+    @apply min-w-full divide-y;
+    border-color: var(--color-border-secondary);
   }
   
   .table-responsive th,
@@ -37,29 +76,29 @@
     @apply px-3 sm:px-6 py-3 sm:py-4 text-sm;
   }
   
-  /* Custom primary color utilities */
+  /* Custom primary color utilities using CSS variables */
   .bg-primary-custom {
-    background-color: #262B50;
+    background-color: var(--color-primary-500);
   }
   
   .text-primary-custom {
-    color: #262B50;
+    color: var(--color-primary-500);
   }
   
   .border-primary-custom {
-    border-color: #262B50;
+    border-color: var(--color-primary-500);
   }
   
   .ring-primary-custom {
-    --tw-ring-color: #262B50;
+    --tw-ring-color: var(--color-primary-500);
   }
   
   .hover\:bg-primary-custom:hover {
-    background-color: #1e223f;
+    background-color: var(--color-primary-600);
   }
   
   .hover\:text-primary-custom:hover {
-    color: #1e223f;
+    color: var(--color-primary-600);
   }
 }
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ThemeSwitcher from './ThemeSwitcher';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -7,9 +8,65 @@ interface HeaderProps {
   onNavigateToPage: (page: string) => void;
 }
 
+interface Notification {
+  id: string;
+  title: string;
+  message: string;
+  type: 'info' | 'success' | 'warning' | 'error';
+  timestamp: string;
+  isRead: boolean;
+  action?: {
+    label: string;
+    page: string;
+  };
+}
+
 const Header: React.FC<HeaderProps> = ({ onToggleSidebar, onSearch, onSignOut, onNavigateToPage }) => {
   const [searchValue, setSearchValue] = useState('');
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  // Sample notifications data
+  const [notifications, setNotifications] = useState<Notification[]>([
+    {
+      id: '1',
+      title: 'New Order Received',
+      message: 'Order #12548 has been placed by Priya Sharma',
+      type: 'success',
+      timestamp: '2 minutes ago',
+      isRead: false,
+      action: { label: 'View Order', page: 'orders' }
+    },
+    {
+      id: '2',
+      title: 'Low Stock Alert',
+      message: 'Premium Cotton T-Shirt is running low on stock (15 items left)',
+      type: 'warning',
+      timestamp: '1 hour ago',
+      isRead: false,
+      action: { label: 'View Inventory', page: 'inventory' }
+    },
+    {
+      id: '3',
+      title: 'Coupon Expiring Soon',
+      message: 'DIWALI25 coupon will expire in 2 days',
+      type: 'info',
+      timestamp: '3 hours ago',
+      isRead: true,
+      action: { label: 'View Coupons', page: 'coupons' }
+    },
+    {
+      id: '4',
+      title: 'New Customer Registration',
+      message: 'Amit Singh has joined as a new customer',
+      type: 'info',
+      timestamp: '5 hours ago',
+      isRead: true,
+      action: { label: 'View Customer', page: 'customers' }
+    }
+  ]);
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -34,6 +91,56 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar, onSearch, onSignOut, o
 
   const toggleProfileMenu = () => {
     setShowProfileMenu(!showProfileMenu);
+    setShowNotifications(false);
+  };
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+    setShowProfileMenu(false);
+  };
+
+  const handleNotificationClick = (notification: Notification) => {
+    // Mark as read
+    setNotifications(prev => 
+      prev.map(n => n.id === notification.id ? { ...n, isRead: true } : n)
+    );
+    
+    // Navigate to action page if available
+    if (notification.action) {
+      onNavigateToPage(notification.action.page);
+    }
+    
+    setShowNotifications(false);
+  };
+
+  const markAllAsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+  };
+
+  const getNotificationIcon = (type: Notification['type']) => {
+    switch (type) {
+      case 'success':
+        return 'fas fa-check-circle text-green-500';
+      case 'warning':
+        return 'fas fa-exclamation-triangle text-yellow-500';
+      case 'error':
+        return 'fas fa-times-circle text-red-500';
+      default:
+        return 'fas fa-info-circle text-blue-500';
+    }
+  };
+
+  const getNotificationBg = (type: Notification['type']) => {
+    switch (type) {
+      case 'success':
+        return 'bg-green-50 border-green-200';
+      case 'warning':
+        return 'bg-yellow-50 border-yellow-200';
+      case 'error':
+        return 'bg-red-50 border-red-200';
+      default:
+        return 'bg-blue-50 border-blue-200';
+    }
   };
 
   return (
@@ -64,12 +171,181 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar, onSearch, onSignOut, o
 
         {/* Right Section - Notifications and Profile */}
         <div className="flex items-center space-x-2 sm:space-x-3 ml-3">
-          {/* Notifications - Hidden on very small screens */}
-          <div className="hidden sm:block relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors">
-            <i className="fas fa-bell text-lg"></i>
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-medium">3</span>
+          {/* Notifications - Mobile */}
+          <div className="sm:hidden relative">
+            <button 
+              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors relative"
+              onClick={toggleNotifications}
+              aria-label="Notifications"
+            >
+              <i className="fas fa-bell text-lg"></i>
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-medium">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            {/* Mobile Notifications Dropdown */}
+            {showNotifications && (
+              <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-80 overflow-y-auto">
+                {/* Header */}
+                <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+                  <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
+                  {unreadCount > 0 && (
+                    <button 
+                      onClick={markAllAsRead}
+                      className="text-xs text-primary-600 hover:text-primary-700 font-medium"
+                    >
+                      Mark all as read
+                    </button>
+                  )}
+                </div>
+
+                {/* Notifications List */}
+                <div className="py-1">
+                  {notifications.length === 0 ? (
+                    <div className="px-4 py-6 text-center text-gray-500">
+                      <i className="fas fa-bell-slash text-2xl mb-2"></i>
+                      <p>No notifications</p>
+                    </div>
+                  ) : (
+                    notifications.slice(0, 3).map((notification) => (
+                      <div
+                        key={notification.id}
+                        className={`px-4 py-3 border-l-4 cursor-pointer hover:bg-gray-50 transition-colors ${
+                          notification.isRead ? 'opacity-75' : ''
+                        } ${getNotificationBg(notification.type)}`}
+                        onClick={() => handleNotificationClick(notification)}
+                      >
+                        <div className="flex items-start space-x-3">
+                          <i className={`${getNotificationIcon(notification.type)} mt-1 flex-shrink-0`}></i>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <h4 className={`text-sm font-medium ${notification.isRead ? 'text-gray-600' : 'text-gray-900'}`}>
+                                {notification.title}
+                              </h4>
+                              <span className="text-xs text-gray-500">{notification.timestamp}</span>
+                            </div>
+                            <p className={`text-sm mt-1 ${notification.isRead ? 'text-gray-500' : 'text-gray-700'}`}>
+                              {notification.message}
+                            </p>
+                            {notification.action && (
+                              <button className="text-xs text-primary-600 hover:text-primary-700 font-medium mt-2">
+                                {notification.action.label} →
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Footer */}
+                {notifications.length > 0 && (
+                  <div className="px-4 py-2 border-t border-gray-100">
+                    <button 
+                      onClick={() => onNavigateToPage('notifications')}
+                      className="w-full text-center text-xs text-primary-600 hover:text-primary-700 font-medium"
+                    >
+                      View All ({notifications.length})
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Notifications - Desktop */}
+          <div className="hidden sm:block relative">
+            <button 
+              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors relative"
+              onClick={toggleNotifications}
+              aria-label="Notifications"
+            >
+              <i className="fas fa-bell text-lg"></i>
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-medium">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            {/* Notifications Dropdown */}
+            {showNotifications && (
+              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-96 overflow-y-auto">
+                {/* Header */}
+                <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+                  <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
+                  {unreadCount > 0 && (
+                    <button 
+                      onClick={markAllAsRead}
+                      className="text-xs text-primary-600 hover:text-primary-700 font-medium"
+                    >
+                      Mark all as read
+                    </button>
+                  )}
+                </div>
+
+                {/* Notifications List */}
+                <div className="py-1">
+                  {notifications.length === 0 ? (
+                    <div className="px-4 py-6 text-center text-gray-500">
+                      <i className="fas fa-bell-slash text-2xl mb-2"></i>
+                      <p>No notifications</p>
+                    </div>
+                  ) : (
+                    notifications.map((notification) => (
+                      <div
+                        key={notification.id}
+                        className={`px-4 py-3 border-l-4 cursor-pointer hover:bg-gray-50 transition-colors ${
+                          notification.isRead ? 'opacity-75' : ''
+                        } ${getNotificationBg(notification.type)}`}
+                        onClick={() => handleNotificationClick(notification)}
+                      >
+                        <div className="flex items-start space-x-3">
+                          <i className={`${getNotificationIcon(notification.type)} mt-1 flex-shrink-0`}></i>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <h4 className={`text-sm font-medium ${notification.isRead ? 'text-gray-600' : 'text-gray-900'}`}>
+                                {notification.title}
+                              </h4>
+                              <span className="text-xs text-gray-500">{notification.timestamp}</span>
+                            </div>
+                            <p className={`text-sm mt-1 ${notification.isRead ? 'text-gray-500' : 'text-gray-700'}`}>
+                              {notification.message}
+                            </p>
+                            {notification.action && (
+                              <button className="text-xs text-primary-600 hover:text-primary-700 font-medium mt-2">
+                                {notification.action.label} →
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Footer */}
+                {notifications.length > 0 && (
+                  <div className="px-4 py-2 border-t border-gray-100">
+                    <button 
+                      onClick={() => onNavigateToPage('notifications')}
+                      className="w-full text-center text-xs text-primary-600 hover:text-primary-700 font-medium"
+                    >
+                      View All Notifications
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           
+          {/* Theme Switcher */}
+          <ThemeSwitcher />
+
           {/* Profile Dropdown */}
           <div className="relative">
             <div 
@@ -140,6 +416,14 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar, onSearch, onSignOut, o
         <div 
           className="fixed inset-0 z-40" 
           onClick={() => setShowProfileMenu(false)}
+        ></div>
+      )}
+
+      {/* Click outside to close notifications */}
+      {showNotifications && (
+        <div 
+          className="fixed inset-0 z-40" 
+          onClick={() => setShowNotifications(false)}
         ></div>
       )}
     </header>

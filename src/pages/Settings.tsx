@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ThemePreview from '../components/ThemePreview';
 
 interface SettingsProps {
   searchTerm: string;
@@ -99,24 +100,44 @@ const Settings: React.FC<SettingsProps> = ({ searchTerm }) => {
           <div key={index} className="bg-white rounded-card border border-gray-200 shadow-card hover:shadow-card-hover transition-shadow">
             <div className="p-5 border-b border-gray-200">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center text-primary-500">
+                <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center text-primary-500">
                   <i className={category.icon}></i>
                 </div>
-                <h5 className="text-lg font-semibold text-gray-900 m-0">{category.title}</h5>
+                <h6 className="font-semibold text-gray-900">{category.title}</h6>
               </div>
             </div>
             <div className="p-5">
-              <div className="space-y-3">
+              <ul className="space-y-2">
                 {category.items.map((item, itemIndex) => (
-                  <div key={itemIndex} className="flex justify-between items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
-                    <span className="text-gray-900">{item}</span>
-                    <i className="fas fa-chevron-right text-gray-400"></i>
-                  </div>
+                  <li key={itemIndex} className="flex items-center justify-between">
+                    <span className="text-sm text-gray-700">{item}</span>
+                    <button className="text-sm text-primary-600 hover:text-primary-700 font-medium">
+                      Configure
+                    </button>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Theme Customization */}
+      <div className="bg-white rounded-card border border-gray-200 shadow-card">
+        <div className="p-6 border-b border-gray-200">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center text-primary-500">
+              <i className="fas fa-palette"></i>
+            </div>
+            <div>
+              <h6 className="font-semibold text-gray-900">Theme Customization</h6>
+              <p className="text-sm text-gray-600">Customize the appearance of your dashboard</p>
+            </div>
+          </div>
+        </div>
+        <div className="p-6">
+          <ThemePreview />
+        </div>
       </div>
 
       {/* Additional Settings */}
