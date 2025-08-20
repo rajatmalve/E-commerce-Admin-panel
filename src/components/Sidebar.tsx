@@ -10,9 +10,11 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ currentPage, onPageChange, isOpen, onToggle }) => {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: 'fas fa-tachometer-alt' },
-    { id: 'products', label: 'Products', icon: 'fas fa-box' },
     { id: 'orders', label: 'Orders', icon: 'fas fa-shopping-cart' },
-    { id: 'customers', label: 'Customers', icon: 'fas fa-users' },
+    { id: 'coupons', label: 'Coupons', icon: 'fas fa-ticket' },
+    { id: 'products', label: 'Products', icon: 'fas fa-box' },
+     { id: 'customers', label: 'Customers', icon: 'fas fa-users' },
+    { id: 'inventory', label: 'Inventory', icon: 'fas fa-warehouse' },
     { id: 'marketing', label: 'Marketing', icon: 'fas fa-bullhorn' },
     { id: 'analytics', label: 'Analytics', icon: 'fas fa-chart-bar' },
     { id: 'settings', label: 'Settings', icon: 'fas fa-cog' }
