@@ -1,0 +1,225 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom component styles that can't be easily replicated with Tailwind */
+@layer components {
+  .stat-icon {
+    @apply w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-lg sm:text-xl;
+  }
+  
+  .card {
+    @apply bg-white rounded-card border border-gray-200 shadow-card;
+  }
+  
+  .btn-primary {
+    @apply px-4 sm:px-6 py-2.5 sm:py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors text-sm font-medium;
+  }
+  
+  .btn-secondary {
+    @apply px-4 sm:px-6 py-2.5 sm:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm;
+  }
+  
+  .table-responsive {
+    @apply overflow-x-auto -mx-4 sm:mx-0;
+  }
+  
+  .table-responsive table {
+    @apply min-w-full divide-y divide-gray-200;
+  }
+  
+  .table-responsive th,
+  .table-responsive td {
+    @apply px-3 sm:px-6 py-3 sm:py-4 text-sm;
+  }
+  
+  /* Custom primary color utilities */
+  .bg-primary-custom {
+    background-color: #262B50;
+  }
+  
+  .text-primary-custom {
+    color: #262B50;
+  }
+  
+  .border-primary-custom {
+    border-color: #262B50;
+  }
+  
+  .ring-primary-custom {
+    --tw-ring-color: #262B50;
+  }
+  
+  .hover\:bg-primary-custom:hover {
+    background-color: #1e223f;
+  }
+  
+  .hover\:text-primary-custom:hover {
+    color: #1e223f;
+  }
+}
+
+/* Custom animations */
+@layer utilities {
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+  
+  .animate-bounce-in {
+    animation: bounceIn 0.5s ease-out;
+  }
+}
+
+/* Mobile-first responsive utilities */
+@layer utilities {
+  .mobile-only {
+    @apply block sm:hidden;
+  }
+  
+  .desktop-only {
+    @apply hidden sm:block;
+  }
+  
+  .tablet-up {
+    @apply hidden md:block;
+  }
+  
+  .mobile-up {
+    @apply hidden sm:block;
+  }
+}
+
+/* Custom animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+  .sidebar-width {
+    width: 280px;
+  }
+  
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .sidebar-width {
+    width: 280px;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 1024px) {
+  .sidebar-width {
+    width: 280px;
+  }
+  
+  .main-content {
+    margin-left: 280px;
+  }
+}
+
+/* Touch-friendly mobile interactions */
+@media (max-width: 768px) {
+  button, 
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  input, 
+  select, 
+  textarea {
+    min-height: 44px;
+  }
+  
+  .nav-item {
+    min-height: 48px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .border-gray-200 {
+    border-color: #000;
+  }
+  
+  .text-gray-600 {
+    color: #000;
+  }
+  
+  .bg-gray-50 {
+    background-color: #fff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
