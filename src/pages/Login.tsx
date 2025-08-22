@@ -53,7 +53,8 @@ const AuthPage: React.FC<AuthProps> = ({ onLogin }) => {
           <div className="absolute top-0 left-0 w-64 h-64 bg-[#FFD700] rounded-full opacity-20 blur-3xl -translate-x-20 -translate-y-20"></div>
           <div className="absolute bottom-0 right-0 w-72 h-72 bg-[#FFD700] rounded-full opacity-20 blur-3xl translate-x-16 translate-y-16"></div>
           <img
-            src="/bg2.jpg"
+            src="/bg2.jpg" 
+
             alt="Auth Illustration"
             className="absolute inset-0 w-full h-full object-cover z-0"
           />
