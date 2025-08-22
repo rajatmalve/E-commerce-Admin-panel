@@ -46,9 +46,11 @@ const Inventory: React.FC<InventoryProps> = ({ searchTerm }) => {
   }>({});
 
   const initialItems: InventoryItem[] = [
-    { sku: 'PRM-TSH-001', name: 'Premium Cotton T-Shirt', category: 'Clothing', stock: 150, reorderLevel: 50, status: 'In Stock' },
-    { sku: 'BLT-HP-100', name: 'Wireless Headphones', category: 'Electronics', stock: 12, reorderLevel: 20, status: 'Low Stock' },
-    { sku: 'CRM-ORG-050', name: 'Organic Face Cream', category: 'Beauty', stock: 0, reorderLevel: 15, status: 'Out of Stock' },
+    { sku: 'PRM-TSH-001', name: 'Premium Kitchen Roll', category: 'Kitchen Roll', stock: 150, reorderLevel: 50, status: 'In Stock' },
+    { sku: 'BLT-HP-100', name: 'Premium Baking Paper', category: 'Baking Paper', stock: 12, reorderLevel: 20, status: 'Low Stock' },
+    { sku: 'CRM-ORG-050', name: 'Premium HRT', category: 'HRT', stock: 0, reorderLevel: 15, status: 'Out of Stock' },
+    { sku: 'CRM-ORG-080', name: 'Premium JRT', category: 'JRT', stock: 0, reorderLevel: 15, status: 'Out of Stock' },
+    { sku: 'CRM-ORG-150', name: 'Premium Toilet Paper', category: 'Toilet Paper', stock: 0, reorderLevel: 15, status: 'Out of Stock' },
   ];
 
   const [items, setItems] = useState<InventoryItem[]>(initialItems);
@@ -180,10 +182,12 @@ const Inventory: React.FC<InventoryProps> = ({ searchTerm }) => {
             <label className="block text-sm text-gray-700 mb-1">Category</label>
             <select className="input-field" value={category} onChange={(e) => setCategory(e.target.value)}>
               <option>All</option>
-              <option>Clothing</option>
-              <option>Electronics</option>
-              <option>Beauty</option>
-              <option>Home</option>
+              <option>Kitchen Roll</option>
+              <option>Baking Paper</option>
+              <option>Baking Sheet</option>
+              <option>HRT</option>
+              <option>JRT</option>
+              <option>Toilet Paper</option>
             </select>
           </div>
           <div>
@@ -287,10 +291,12 @@ const Inventory: React.FC<InventoryProps> = ({ searchTerm }) => {
                 <div>
                   <label className="block text-sm text-gray-700 mb-1">Category</label>
                   <select className="input-field" value={newItem.category} onChange={(e) => handleNewChange('category', e.target.value)}>
-                    <option>Clothing</option>
-                    <option>Electronics</option>
-                    <option>Beauty</option>
-                    <option>Home</option>
+                    <option>Kitchen Roll</option>
+                    <option>Baking Paper</option>
+                    <option>Baking Sheet</option>
+                    <option>HRT</option>
+                    <option>JRT</option>
+                    <option>Toilet Paper</option>
                   </select>
                 </div>
                 <div>
@@ -398,10 +404,12 @@ const Inventory: React.FC<InventoryProps> = ({ searchTerm }) => {
                 <div>
                   <label className="block text-sm text-gray-700 mb-1">Category</label>
                   <select className="input-field" value={selectedItem.category} onChange={(e) => handleEditChange('category', e.target.value)}>
-                    <option>Clothing</option>
-                    <option>Electronics</option>
-                    <option>Beauty</option>
-                    <option>Home</option>
+                    <option>Kitchen Roll</option>
+                    <option>Baking Paper</option>
+                    <option>Baking Sheet</option>
+                    <option>HRT</option>
+                    <option>JRT</option>
+                    <option>Toilet Paper</option>
                   </select>
                 </div>
                 <div>

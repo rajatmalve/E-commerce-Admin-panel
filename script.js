@@ -345,10 +345,12 @@ function createProductForm(productName = '') {
                     <label class="form-label">Category</label>
                     <select class="form-select">
                         <option>Select Category</option>
-                        <option>Clothing</option>
-                        <option>Electronics</option>
-                        <option>Beauty</option>
-                        <option>Home</option>
+                        <option>Kitchen Roll</option>
+                        <option>Baking Paper</option>
+                        <option>Baking Sheet</option>
+                        <option>HRT</option>
+                        <option>JRT</option>
+                        <option>Toilet Paper</option>
                     </select>
                 </div>
                 <div class="col-md-6 mb-3">
