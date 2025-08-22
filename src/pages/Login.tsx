@@ -53,7 +53,7 @@ const AuthPage: React.FC<AuthProps> = ({ onLogin, onSignUp }) => {
 
           {/* Image */}
           <img
-            src="/bg2.jpg" // Replace with your image
+            src="/bg2.jpg" 
             alt="Auth Illustration"
             className="absolute inset-0 w-full h-full object-cover z-0"
           />
