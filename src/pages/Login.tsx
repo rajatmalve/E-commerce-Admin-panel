@@ -53,9 +53,9 @@ const AuthPage: React.FC<AuthProps> = ({ onLogin, onSignUp }) => {
 
           {/* Image */}
           <img
-            src="https://via.placeholder.com/400x400" // Replace with your image
+            src="/bg2.jpg" // Replace with your image
             alt="Auth Illustration"
-            className="w-3/4 max-w-sm rounded-xl shadow-lg z-10"
+            className="absolute inset-0 w-full h-full object-cover z-0"
           />
         </div>
 
