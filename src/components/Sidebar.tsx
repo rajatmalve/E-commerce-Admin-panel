@@ -10,14 +10,15 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ currentPage, onPageChange, isOpen, onToggle }) => {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: 'fas fa-tachometer-alt' },
-    { id: 'orders', label: 'Orders', icon: 'fas fa-shopping-cart' },
-    { id: 'coupons', label: 'Coupons', icon: 'fas fa-ticket' },
+    { id: 'category', label: 'Category' ,icon: 'fas fa-th'},
     { id: 'products', label: 'Products', icon: 'fas fa-box' },
-     { id: 'customers', label: 'Customers', icon: 'fas fa-users' },
+    { id: 'orders', label: 'Orders', icon: 'fas fa-shopping-cart' },
     { id: 'inventory', label: 'Inventory', icon: 'fas fa-warehouse' },
+    { id: 'customers', label: 'Customers', icon: 'fas fa-users' },
+    { id: 'coupons', label: 'Coupons', icon: 'fas fa-ticket' },
     { id: 'marketing', label: 'Marketing', icon: 'fas fa-bullhorn' },
     { id: 'analytics', label: 'Analytics', icon: 'fas fa-chart-bar' },
-    { id: 'settings', label: 'Settings', icon: 'fas fa-cog' }
+    { id: 'settings', label: 'Settings', icon: 'fas fa-cog' },
   ];
 
   const handleNavClick = (pageId: string) => {
@@ -31,14 +32,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onPageChange, isOpen, on
   return (
     <>
       {/* Sidebar */}
-      <div className={`fixed top-0 left-0 w-sidebar h-screen bg-primary-500 text-white z-50 transition-transform duration-300 ease-in-out overflow-y-auto ${
-        isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-      }`}>
+      <div className={`fixed top-0 left-0 w-sidebar h-screen bg-primary-500 text-white z-50 transition-transform duration-300 ease-in-out overflow-y-auto ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        }`}>
         {/* Header */}
         <div className="p-4 lg:p-6 border-b border-white border-opacity-10 flex justify-between items-center">
-          <h4 className="text-lg lg:text-xl font-bold text-white m-0 truncate">Commerce Pro</h4>
-          <button 
-            className="lg:hidden p-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors" 
+          <h4 className="text-lg lg:text-xl font-bold text-white m-0 truncate">POCHO </h4>
+          <button
+            className="lg:hidden p-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors"
             onClick={onToggle}
             aria-label="Close sidebar"
           >
@@ -52,11 +52,10 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onPageChange, isOpen, on
             {navItems.map((item) => (
               <li key={item.id}>
                 <button
-                  className={`w-full px-3 lg:px-6 py-3 lg:py-3.5 flex items-center text-left transition-all duration-300 ease-in-out rounded-lg ${
-                    currentPage === item.id 
-                      ? 'text-white bg-blue-500 shadow-lg' 
+                  className={`w-full px-3 lg:px-6 py-3 lg:py-3.5 flex items-center text-left transition-all duration-300 ease-in-out rounded-lg ${currentPage === item.id
+                      ? 'text-white bg-blue-500 shadow-lg'
                       : 'text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-10'
-                  }`}
+                    }`}
                   onClick={() => handleNavClick(item.id)}
                 >
                   <i className={`${item.icon} w-5 lg:w-6 mr-3 text-base lg:text-lg flex-shrink-0`}></i>
@@ -78,8 +77,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onPageChange, isOpen, on
 
       {/* Mobile Overlay */}
       {isOpen && (
-        <div 
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40" 
+        <div
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={onToggle}
         ></div>
       )}
