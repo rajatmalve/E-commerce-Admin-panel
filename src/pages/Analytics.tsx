@@ -64,13 +64,13 @@ const Analytics: React.FC<AnalyticsProps> = ({ searchTerm }) => {
   const topProducts: TopProduct[] = [
     {
       name: 'Premium Cotton T-Shirt',
-      category: 'Clothing',
+      category: 'Baking Paper',
       sales: '₹45,670',
       growth: '+15.2%'
     },
     {
       name: 'Wireless Headphones',
-      category: 'Electronics',
+      category: 'Kitchen Roll',
       sales: '₹38,920',
       growth: '+12.8%'
     }

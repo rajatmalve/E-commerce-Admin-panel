@@ -40,7 +40,7 @@ const Coupons: React.FC<CouponsProps> = ({ searchTerm }) => {
     { code: 'FLAT200', type: 'Flat', value: '₹200', usage: 87, status: 'Scheduled', validTill: '2025-03-10' },
   ]);
 
-  const categories = ['All Categories', 'Clothing', 'Electronics', 'Beauty'];
+  const categories = ['All Categories', '"Kitchen Roll', 'Baking Paper', 'Baking Sheet','HRT','JRT','Toilet Paper',];
   const statuses = ['All Status', 'Active', 'Inactive', 'Out of Stock'];
 
   // Use local search term if available, otherwise use prop searchTerm

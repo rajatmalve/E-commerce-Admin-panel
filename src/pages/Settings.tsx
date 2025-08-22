@@ -122,24 +122,6 @@ const Settings: React.FC<SettingsProps> = ({ searchTerm }) => {
         ))}
       </div>
 
-      {/* Theme Customization */}
-      <div className="bg-white rounded-card border border-gray-200 shadow-card">
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center text-primary-500">
-              <i className="fas fa-palette"></i>
-            </div>
-            <div>
-              <h6 className="font-semibold text-gray-900">Theme Customization</h6>
-              <p className="text-sm text-gray-600">Customize the appearance of your dashboard</p>
-            </div>
-          </div>
-        </div>
-        <div className="p-6">
-          <ThemePreview />
-        </div>
-      </div>
-
       {/* Additional Settings */}
       <div className="bg-white rounded-card border border-gray-200 shadow-card">
         <div className="p-5 border-b border-gray-200">

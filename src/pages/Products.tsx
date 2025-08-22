@@ -44,7 +44,7 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
     {
       id: '#1',
       name: 'Premium Cotton T-Shirt',
-      category: 'Clothing',
+      category: 'Baking Sheet',
       mrp: '₹899',
       sellingPrice: '₹599',
       stock: 150,
@@ -54,7 +54,7 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
     {
       id: '#2',
       name: 'Wireless Bluetooth Headphones',
-      category: 'Electronics',
+      category: 'Baking Paper',
       mrp: '₹2999',
       sellingPrice: '₹1999',
       stock: 45,
@@ -63,9 +63,8 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
     }
   ]);
 
-  const categories = ['All Categories', 'Clothing', 'Electronics', 'Beauty'];
+  const categories = ['All Categories', 'Kitchen Roll', 'Baking Paper', 'Baking Sheet','HRT','JRT','Toilet Paper'];
   const statuses = ['All Status', 'Active', 'Inactive', 'Out of Stock'];
-
   // Use local search term if available, otherwise use prop searchTerm
   const effectiveSearchTerm = localSearchTerm || searchTerm;
 
@@ -452,10 +451,12 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
                     <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                       <option>Select Category</option>
-                      <option>Clothing</option>
-                      <option>Electronics</option>
-                      <option>Beauty</option>
-                      <option>Home</option>
+                      <option>Kitchen Roll</option>
+                      <option>Baking Paper</option>
+                      <option>Baking Sheet</option>
+                      <option>HRT</option>
+                      <option>JRT</option>
+                      <option>Toilet Paper</option>
                     </select>
                   </div>
                   <div>
