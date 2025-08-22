@@ -1,143 +1,201 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-interface LoginProps {
+interface AuthProps {
   onLogin: () => void;
+  onSignUp: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const AuthPage: React.FC<AuthProps> = ({ onLogin, onSignUp }) => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Login attempt:', { email, password });
-    
-    // For demo purposes, just call onLogin
-    // In real app, you would validate credentials first
-    onLogin();
-  };
 
-  const handleDemoLogin = () => {
-    // Demo login for testing
-    onLogin();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[0-9]{10}$/;
+
+    if (!emailRegex.test(emailOrPhone) && !phoneRegex.test(emailOrPhone)) {
+      alert("Please enter a valid email or 10-digit phone number");
+      return;
+    }
+
+    if (!isLogin && name.trim() === "") {
+      alert("Please enter your full name");
+      return;
+    }
+
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters");
+      return;
+    }
+
+    if (isLogin) {
+      console.log("Login attempt:", { emailOrPhone, password });
+      onLogin();
+    } else {
+      console.log("Sign Up attempt:", { name, emailOrPhone, password });
+      onSignUp();
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-6 px-4 sm:py-12 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-6 sm:space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <div className="mx-auto h-12 w-12 sm:h-16 sm:w-16 bg-primary-500 rounded-full flex items-center justify-center mb-4 sm:mb-6">
-            <i className="fas fa-shopping-cart text-white text-xl sm:text-2xl"></i>
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">
-            Welcome back
-          </h2>
-          <p className="text-sm sm:text-base text-gray-600">
-            Sign in to your Commerce Pro account
-          </p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-[#262B50] px-4">
+      <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row w-full max-w-5xl overflow-hidden">
         
-        {/* Demo Login Button */}
-        <div className="text-center">
-          <button
-            onClick={handleDemoLogin}
-            className="w-full py-3 sm:py-3.5 px-4 border border-transparent text-sm sm:text-base font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors mb-4"
-          >
-            🚀 Demo Login (Skip Form)
-          </button>
-          <div className="text-xs sm:text-sm text-gray-500 mb-4">
-            Or fill the form below
-          </div>
+        {/* Left Side - Image + Yellow Accent */}
+        <div className="hidden md:flex md:w-1/2 relative bg-[#262B50] text-white items-center justify-center">
+          {/* Yellow Shape */}
+          <div className="absolute top-0 left-0 w-64 h-64 bg-[#FFD700] rounded-full opacity-20 blur-3xl -translate-x-20 -translate-y-20"></div>
+          <div className="absolute bottom-0 right-0 w-72 h-72 bg-[#FFD700] rounded-full opacity-20 blur-3xl translate-x-16 translate-y-16"></div>
+
+          {/* Image */}
+          <img
+            src="https://via.placeholder.com/400x400" // Replace with your image
+            alt="Auth Illustration"
+            className="w-3/4 max-w-sm rounded-xl shadow-lg z-10"
+          />
         </div>
-        
-        {/* Login Form */}
-        <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
+
+        {/* Right Side - Form */}
+        <div className="w-full md:w-1/2 p-6 sm:p-10">
+          {/* Header */}
+          <div className="flex flex-col items-center mb-6 text-center">
+            <div className="h-14 w-14 sm:h-16 sm:w-16 bg-[#262B50] rounded-full flex items-center justify-center shadow-lg">
+              <i className="fas fa-user text-white text-xl sm:text-2xl"></i>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#262B50] mt-4">
+              {isLogin ? "Welcome Back!" : "Create Account"}
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-500 mt-2">
+              {isLogin ? "Sign in to continue" : "Sign up to start your journey"}
+            </p>
+          </div>
+
+          {/* Toggle Buttons */}
+          <div className="flex mb-6 border border-gray-300 rounded-lg overflow-hidden text-sm sm:text-base">
+            <button
+              onClick={() => setIsLogin(true)}
+              type="button"
+              className={`flex-1 py-2 sm:py-3 font-semibold ${
+                isLogin ? "bg-[#262B50] text-white" : "bg-gray-100 text-gray-700"
+              }`}
+            >
+              Login
+            </button>
+            <button
+              onClick={() => setIsLogin(false)}
+              type="button"
+              className={`flex-1 py-2 sm:py-3 font-semibold ${
+                !isLogin ? "bg-[#262B50] text-white" : "bg-gray-100 text-gray-700"
+              }`}
+            >
+              Sign Up
+            </button>
+          </div>
+
+          {/* Form */}
+          <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
+            {!isLogin && (
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+                >
+                  Full Name
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  placeholder="Enter your name"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#262B50] text-sm sm:text-base"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+            )}
+
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email address
+              <label
+                htmlFor="emailOrPhone"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+              >
+                Email or Phone
               </label>
               <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="w-full px-3 py-3 sm:py-3.5 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:z-10 text-sm sm:text-base"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="emailOrPhone"
+                type="text"
+                placeholder="Enter your email or phone number"
+                className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#262B50] text-sm sm:text-base"
+                value={emailOrPhone}
+                onChange={(e) => setEmailOrPhone(e.target.value)}
               />
             </div>
+
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+              >
                 Password
               </label>
               <input
                 id="password"
-                name="password"
                 type="password"
-                autoComplete="current-password"
-                required
-                className="w-full px-3 py-3 sm:py-3.5 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:z-10 text-sm sm:text-base"
                 placeholder="Enter your password"
+                className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#262B50] text-sm sm:text-base"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-          </div>
 
-          {/* Remember Me and Forgot Password */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                Remember me
-              </label>
-            </div>
+            {isLogin && (
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs sm:text-sm text-gray-600 space-y-2 sm:space-y-0">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-gray-300 text-[#262B50] focus:ring-[#262B50]"
+                  />
+                  <span>Remember me</span>
+                </label>
+                <a href="#" className="hover:underline text-[#262B50]">
+                  Forgot password?
+                </a>
+              </div>
+            )}
 
-            <div className="text-sm">
-              <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
-                Forgot your password?
-              </a>
-            </div>
-          </div>
-
-          {/* Sign In Button */}
-          <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-3 sm:py-3.5 px-4 border border-transparent text-sm sm:text-base font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+              className="w-full bg-[#262B50] text-white font-semibold py-2 sm:py-3 rounded-lg hover:bg-[#1E2340] transition duration-300 text-sm sm:text-base"
             >
-              <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                <i className="fas fa-sign-in-alt text-primary-500 group-hover:text-primary-400"></i>
-              </span>
-              Sign in
+              {isLogin ? "Sign In" : "Sign Up"}
             </button>
-          </div>
+          </form>
 
-          {/* Sign Up Link */}
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
-              <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
-                Sign up
-              </a>
-            </p>
-          </div>
-        </form>
+          {isLogin && (
+            <>
+              <div className="mt-6 flex items-center text-gray-400">
+                <hr className="flex-1 border-gray-300" />
+                <span className="px-2 sm:px-3 text-xs sm:text-sm">OR</span>
+                <hr className="flex-1 border-gray-300" />
+              </div>
+
+              <div className="mt-4 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <button className="flex-1 bg-gray-100 text-gray-700 py-2 sm:py-3 rounded-lg hover:bg-gray-200 transition shadow text-sm sm:text-base">
+                  <i className="fab fa-google text-red-500 mr-2"></i> Google
+                </button>
+                <button className="flex-1 bg-gray-100 text-gray-700 py-2 sm:py-3 rounded-lg hover:bg-gray-200 transition shadow text-sm sm:text-base">
+                  <i className="fab fa-facebook text-blue-600 mr-2"></i> Facebook
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default Login;
-
-
+export default AuthPage;

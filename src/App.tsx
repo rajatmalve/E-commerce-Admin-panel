@@ -14,6 +14,7 @@ import Inventory from './pages/Inventory';
 import Login from './pages/Login';
 import { ThemeProvider } from './contexts/ThemeContext';
 import './index.css';
+import CategoriesTab from './pages/Categorys';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -59,6 +60,8 @@ function App() {
     switch (currentPage) {
       case 'dashboard':
         return <Dashboard searchTerm={searchTerm} onNavigateToPage={handleNavigateToPage} />;
+      case 'category':
+        return <CategoriesTab searchTerm={searchTerm} />;
       case 'products':
         return <Products searchTerm={searchTerm} />;
       case 'orders':
