@@ -20,7 +20,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // Set to true for demo
+  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem("pochoToken")); // Set to true for demo
 
   const handlePageChange = (pageName: string) => {
     setCurrentPage(pageName);
@@ -41,6 +41,7 @@ function App() {
   const handleSignOut = () => {
     setIsAuthenticated(false);
     setCurrentPage('dashboard');
+    localStorage.removeItem("pochoToken")
     // You can add more sign out logic here like clearing tokens, etc.
   };
 
@@ -108,14 +109,14 @@ function App() {
   return (
     <ThemeProvider>
       <div className="flex min-h-screen bg-gray-50">
-        <Sidebar 
-          currentPage={currentPage} 
+        <Sidebar
+          currentPage={currentPage}
           onPageChange={handlePageChange}
           isOpen={sidebarOpen}
           onToggle={toggleSidebar}
         />
         <div className={`flex-1 transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-sidebar' : 'ml-0'}`}>
-          <Header 
+          <Header
             onToggleSidebar={toggleSidebar}
             onSearch={handleSearch}
             onSignOut={handleSignOut}

@@ -281,10 +281,10 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Product Management</h1>
-          <p className="text-gray-600 text-lg">Manage your product catalog, inventory, and pricing</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Product Management</h1>
+          <p className="text-gray-600 text-base sm:text-lg">Manage your product catalog, inventory, and pricing</p>
         </div>
         <button className="bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2" onClick={handleAddProduct}>
           <i className="fas fa-plus"></i>
@@ -294,20 +294,20 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
 
       {/* Filters */}
       <div className="bg-white rounded-card border border-gray-200 shadow-card">
-        <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="relative">
+        <div className="p-4 sm:p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+            <div className="relative sm:col-span-2 md:col-span-1">
               <i className="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
               <input 
                 type="text" 
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent" 
+                className="w-full pl-10 pr-4 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm sm:text-base" 
                 placeholder="Search products..."
                 value={localSearchTerm}
                 onChange={(e) => setLocalSearchTerm(e.target.value)}
               />
             </div>
             <select 
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm sm:text-base"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
             >
@@ -316,7 +316,7 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
               ))}
             </select>
             <select 
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm sm:text-base"
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
             >
@@ -324,9 +324,10 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
                 <option key={index}>{status}</option>
               ))}
             </select>
-            <button className="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2" onClick={handleMoreFilters}>
+            <button className="w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base" onClick={handleMoreFilters}>
               <i className="fas fa-filter"></i>
-              <span>More Filters</span>
+              <span className="hidden sm:inline">More Filters</span>
+              <span className="sm:hidden">Filters</span>
             </button>
           </div>
         </div>
@@ -338,55 +339,62 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="text-left py-4 px-6 font-semibold text-gray-900">Product</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-900">Category</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-900">MRP</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-900">Selling Price</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-900">Stock</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-900">Status</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-900">Actions</th>
+                <th className="text-left py-3 px-4 sm:py-4 sm:px-6 font-semibold text-gray-900 text-sm sm:text-base">Product</th>
+                <th className="text-left py-3 px-4 sm:py-4 sm:px-6 font-semibold text-gray-900 text-sm sm:text-base hidden sm:table-cell">Category</th>
+                <th className="text-left py-3 px-4 sm:py-4 sm:px-6 font-semibold text-gray-900 text-sm sm:text-base hidden md:table-cell">MRP</th>
+                <th className="text-left py-3 px-4 sm:py-4 sm:px-6 font-semibold text-gray-900 text-sm sm:text-base">Price</th>
+                <th className="text-left py-3 px-4 sm:py-4 sm:px-6 font-semibold text-gray-900 text-sm sm:text-base hidden md:table-cell">Stock</th>
+                <th className="text-left py-3 px-4 sm:py-4 sm:px-6 font-semibold text-gray-900 text-sm sm:text-base">Status</th>
+                <th className="text-left py-3 px-4 sm:py-4 sm:px-6 font-semibold text-gray-900 text-sm sm:text-base">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {currentProducts.map((product, index) => (
                 <tr key={index} className="hover:bg-gray-50">
-                  <td className="py-4 px-6">
-                    <div className="flex items-center space-x-3">
-                      <img src={product.image} alt="Product" className="w-12 h-12 rounded-lg object-cover" />
-                      <div>
-                        <div className="font-semibold text-gray-900">{product.name}</div>
-                        <div className="text-sm text-gray-500">ID: {product.id}</div>
+                  <td className="py-3 px-4 sm:py-4 sm:px-6">
+                    <div className="flex items-center space-x-2 sm:space-x-3">
+                      <img src={product.image} alt="Product" className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg object-cover" />
+                      <div className="min-w-0">
+                        <div className="font-semibold text-gray-900 text-sm sm:text-base truncate">{product.name}</div>
+                        <div className="text-xs sm:text-sm text-gray-500">ID: {product.id}</div>
+                        <div className="text-xs text-gray-600 sm:hidden mt-1">{product.category}</div>
+                        <div className="text-xs text-gray-600 md:hidden mt-1">Stock: {product.stock}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="py-4 px-6 text-gray-900">{product.category}</td>
-                  <td className="py-4 px-6 text-gray-900">{product.mrp}</td>
-                  <td className="py-4 px-6"><span className="font-semibold text-gray-900">{product.sellingPrice}</span></td>
-                  <td className="py-4 px-6 text-gray-900">{product.stock}</td>
-                  <td className="py-4 px-6">
-                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium badge-${product.status.toLowerCase()}`}>
+                  <td className="py-3 px-4 sm:py-4 sm:px-6 text-gray-900 text-sm sm:text-base hidden sm:table-cell">{product.category}</td>
+                  <td className="py-3 px-4 sm:py-4 sm:px-6 text-gray-900 text-sm sm:text-base hidden md:table-cell">{product.mrp}</td>
+                  <td className="py-3 px-4 sm:py-4 sm:px-6">
+                    <span className="font-semibold text-gray-900 text-sm sm:text-base">{product.sellingPrice}</span>
+                  </td>
+                  <td className="py-3 px-4 sm:py-4 sm:px-6 text-gray-900 text-sm sm:text-base hidden md:table-cell">{product.stock}</td>
+                  <td className="py-3 px-4 sm:py-4 sm:px-6">
+                    <span className={`inline-block px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-medium badge-${product.status.toLowerCase()}`}>
                       {product.status}
                     </span>
                   </td>
-                  <td className="py-4 px-6">
-                    <div className="flex space-x-1">
+                  <td className="py-3 px-4 sm:py-4 sm:px-6">
+                    <div className="flex space-x-1 sm:space-x-2">
                       <button 
-                        className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors"
+                        className="p-1 sm:p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors text-sm"
                         onClick={() => handleViewProduct(product)}
+                        title="View"
                       >
-                        <i className="fas fa-eye"></i>
+                        <i className="fas fa-eye text-xs sm:text-sm"></i>
                       </button>
                       <button 
-                        className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-colors"
+                        className="p-1 sm:p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                         onClick={() => handleEditProduct(product)}
+                        title="Edit"
                       >
-                        <i className="fas fa-edit"></i>
+                        <i className="fas fa-edit text-xs sm:text-sm"></i>
                       </button>
                       <button 
-                        className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-1 sm:p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors text-sm"
                         onClick={() => handleDeleteProduct(product)}
+                        title="Delete"
                       >
-                        <i className="fas fa-trash"></i>
+                        <i className="fas fa-trash text-xs sm:text-sm"></i>
                       </button>
                     </div>
                   </td>
@@ -399,24 +407,26 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center space-x-2 py-4">
-          <button 
-            className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors" 
-            onClick={handlePreviousPage}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          <span className="text-gray-700">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button 
-            className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors" 
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
+        <div className="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-3 py-4">
+          <div className="flex items-center space-x-2">
+            <button 
+              className="px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm sm:text-base" 
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+            >
+              ← Prev
+            </button>
+            <span className="text-gray-700 text-sm sm:text-base">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button 
+              className="px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm sm:text-base" 
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+            >
+              Next →
+            </button>
+          </div>
         </div>
       )}
 
