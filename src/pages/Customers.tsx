@@ -127,8 +127,8 @@ const Customers: React.FC<CustomersProps> = ({ searchTerm, onViewCustomerProfile
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Customer Management</h1>
-        <p className="text-gray-600 text-lg">Manage customer relationships, loyalty points, and segments</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Customer Management</h1>
+        <p className="text-gray-600 text-base sm:text-lg">Manage customer relationships, loyalty points, and segments</p>
       </div>
 
       {/* Customer Stats */}

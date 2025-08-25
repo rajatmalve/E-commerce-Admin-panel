@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 interface AuthProps {
@@ -5,55 +6,79 @@ interface AuthProps {
 }
 
 const AuthPage: React.FC<AuthProps> = ({ onLogin }) => {
-  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+
+  const [userDetails, setUseDetails] = useState({
+    email: "",
+    password: ""
+  })
 
   // Load email from localStorage if Remember Me was checked
   useEffect(() => {
     const savedEmail = localStorage.getItem("rememberedEmail");
     if (savedEmail) {
-      setEmailOrPhone(savedEmail);
+      setEmail(savedEmail);
       setRememberMe(true);
     }
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    try {
+      e.preventDefault();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[0-9]{10}$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!emailRegex.test(emailOrPhone) && !phoneRegex.test(emailOrPhone)) {
-      alert("Please enter a valid email or 10-digit phone number");
-      return;
+      if (!emailRegex.test(email)) {
+        alert("Please enter a valid email");
+        return;
+      }
+
+      if (password.length < 8 && password.length > 16) {
+        alert("Password must be at least 8 characters");
+        return;
+      }
+
+      if (rememberMe) {
+        localStorage.setItem("rememberedEmail", email);
+      } else {
+        localStorage.removeItem("rememberedEmail");
+      }
+
+
+      //api call
+      const res = await axios.post("https://pochobackend.rsinfotechsys.com/admin/login", { email: email, password: password }, {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      if (res?.data?.status?.toLowerCase() === "success") {
+        //Store the token in local storage for future use
+        localStorage.setItem("pochoToken", res?.data?.token);
+        localStorage.setItem("pochoUserDetails", res?.data?.userDetails);
+        onLogin();
+      } else {
+        alert(res?.data?.message);
+      }
+    } catch (error) {
+      alert(error?.message)
     }
 
-    if (password.length < 6) {
-      alert("Password must be at least 6 characters");
-      return;
-    }
 
-    if (rememberMe) {
-      localStorage.setItem("rememberedEmail", emailOrPhone);
-    } else {
-      localStorage.removeItem("rememberedEmail");
-    }
 
-    console.log("Login attempt:", { emailOrPhone, password, rememberMe });
-    onLogin();
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#262B50] px-4">
       <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row w-full max-w-5xl overflow-hidden relative z-10">
-        
+
         {/* Left Side - Image + Yellow Accent */}
         <div className="hidden md:flex md:w-1/2 relative bg-[#262B50] text-white items-center justify-center">
           <div className="absolute top-0 left-0 w-64 h-64 bg-[#FFD700] rounded-full opacity-20 blur-3xl -translate-x-20 -translate-y-20"></div>
           <div className="absolute bottom-0 right-0 w-72 h-72 bg-[#FFD700] rounded-full opacity-20 blur-3xl translate-x-16 translate-y-16"></div>
           <img
-            src="/bg2.jpg" 
+            src="/bg2.jpg"
 
             alt="Auth Illustration"
             className="absolute inset-0 w-full h-full object-cover z-0"
@@ -67,7 +92,7 @@ const AuthPage: React.FC<AuthProps> = ({ onLogin }) => {
               <i className="fas fa-user text-white text-xl sm:text-2xl"></i>
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-[#262B50] mt-4">
-              Welcome 
+              Welcome
             </h2>
             <p className="text-xs sm:text-sm text-gray-500 mt-2">
               Sign in to continue
@@ -88,8 +113,7 @@ const AuthPage: React.FC<AuthProps> = ({ onLogin }) => {
                 type="text"
                 placeholder="Enter your email or phone number"
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#262B50] text-sm sm:text-base"
-                value={emailOrPhone}
-                onChange={(e) => setEmailOrPhone(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 

@@ -206,7 +206,7 @@ const Coupons: React.FC<CouponsProps> = ({ searchTerm }) => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Coupons</h1>
-          <p className="text-gray-600">Create and manage discount coupons</p>
+          <p className="text-gray-600 text-base sm:text-lg">Create and manage discount coupons</p>
         </div>
         <div className="flex gap-2">
           <button className="btn-secondary">Export</button>

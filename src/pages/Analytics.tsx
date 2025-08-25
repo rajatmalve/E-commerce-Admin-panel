@@ -87,8 +87,8 @@ const Analytics: React.FC<AnalyticsProps> = ({ searchTerm }) => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Analytics & Reports</h1>
-        <p className="text-gray-600 text-lg">Track performance metrics, analyze trends, and make data-driven decisions</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Analytics & Reports</h1>
+        <p className="text-gray-600 text-base sm:text-lg">Track performance metrics, analyze trends, and make data-driven decisions</p>
       </div>
 
       {/* Key Metrics */}

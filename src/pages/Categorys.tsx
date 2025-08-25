@@ -62,14 +62,17 @@ const CategoriesTab: React.FC = () => {
   return (
     <div className="p-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Categories</h2>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Categories</h2>
+          <p className="text-gray-600 text-base sm:text-lg">Manage product categories and attributes</p>
+        </div>
         <button
           onClick={openAddModal}
           className="bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2"
         >
            <i className="fas fa-plus"></i>
-          <span>Add Product</span>
+          <span>Add Category</span>
         </button>
       </div>
 
