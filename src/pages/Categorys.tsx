@@ -4,7 +4,6 @@ import { FaBox, FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import Loader from "./Loader";
 
 
-
 const CategoriesTab: React.FC = () => {
   const [categories, setCategories] = useState([]);
 
@@ -32,9 +31,17 @@ const CategoriesTab: React.FC = () => {
 
   const handleSave = async () => {
     try {
-
-
       //validation 
+      if (!name.trim()) {
+        alert("Please enter a category name");
+        return;
+      }
+
+      if (!description.trim()) {
+        alert("Please enter a description");
+        return;
+      }
+
       setLoader(true)
       if (editMode && currentId !== null) {
         const serverResponse = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/update-category`,
@@ -143,36 +150,43 @@ const CategoriesTab: React.FC = () => {
       </div>
 
       {/* Categories Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {categories.map((cat) => (
-          <div
-            key={cat.id}
-            className="bg-white shadow-md p-4 rounded-lg flex flex-col justify-between"
-          >
-            <div className="flex items-center gap-3 mb-3">
-              <div className="text-3xl text-primary-500"><FaBox /></div>
-              <div>
-                <h3 className="text-lg font-semibold">{cat?.name}</h3>
-                <p className="text-gray-500 text-sm">{cat?.description}</p>
+     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {categories.length === 0 ? (
+          <div className="col-span-full text-center text-gray-500 text-lg font-medium py-10">
+            🚫 No categories found. Please add one!
+          </div>
+        ) : (
+          categories.map((cat) => (
+            <div
+              key={cat.id}
+              className="bg-white shadow-md p-4 rounded-lg flex flex-col justify-between"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className="text-3xl text-primary-500"><FaBox /></div>
+                <div>
+                  <h3 className="text-lg font-semibold">{cat?.name}</h3>
+                  <p className="text-gray-500 text-sm">{cat?.description}</p>
+                </div>
+              </div>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => openEditModal(cat)}
+                  className="text-primary-500 text-xl hover:text-primary-600 transition"
+                >
+                  <FaEdit />
+                </button>
+                <button
+                  onClick={() => deleteCategory(cat.id)}
+                  className="text-red-500 text-xl hover:text-red-600 transition"
+                >
+                  <FaTrash />
+                </button>
               </div>
             </div>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => openEditModal(cat)}
-                className="text-primary-500 text-xl hover:text-primary-600 transition"
-              >
-                <FaEdit />
-              </button>
-              <button
-                onClick={() => deleteCategory(cat.id)}
-                className="text-red-500 text-xl hover:text-red-600 transition"
-              >
-                <FaTrash />
-              </button>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
+
 
       {/* Modal */}
       {modalOpen && (
