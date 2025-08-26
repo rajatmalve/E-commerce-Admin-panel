@@ -1,25 +1,19 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { FaBox, FaPlus, FaEdit, FaTrash } from "react-icons/fa";
+import Loader from "./Loader";
 
-interface Category {
-  id: number;
-  name: string;
-  icon: JSX.Element;
-  description?: string;
-}
+
 
 const CategoriesTab: React.FC = () => {
-  const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: "Electronics", icon: <FaBox />, description: "Mobile, Laptop, TV" },
-    { id: 2, name: "Fashion", icon: <FaBox />, description: "Clothes & Accessories" },
-    { id: 3, name: "Beauty", icon: <FaBox />, description: "Cosmetics & Skincare" },
-  ]);
+  const [categories, setCategories] = useState([]);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentId, setCurrentId] = useState<number | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [loader, setLoader] = useState(false)
 
   const openAddModal = () => {
     setEditMode(false);
@@ -28,7 +22,7 @@ const CategoriesTab: React.FC = () => {
     setModalOpen(true);
   };
 
-  const openEditModal = (cat: Category) => {
+  const openEditModal = (cat) => {
     setEditMode(true);
     setCurrentId(cat.id);
     setName(cat.name);
@@ -36,28 +30,100 @@ const CategoriesTab: React.FC = () => {
     setModalOpen(true);
   };
 
-  const handleSave = () => {
-    if (editMode && currentId !== null) {
-      setCategories(
-        categories.map((cat) =>
-          cat.id === currentId ? { ...cat, name, description } : cat
-        )
-      );
-    } else {
-      const newCategory: Category = {
-        id: categories.length > 0 ? categories[categories.length - 1].id + 1 : 1,
-        name,
-        icon: <FaBox />,
-        description,
-      };
-      setCategories([...categories, newCategory]);
+  const handleSave = async () => {
+    try {
+
+
+      //validation 
+      setLoader(true)
+      if (editMode && currentId !== null) {
+        const serverResponse = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/update-category`,
+          { categoryId: currentId, name, description },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem("pochoToken")}`
+            }
+          }
+        );
+        const data = serverResponse?.data;
+        if (data.status === "SUCCESS") {
+          await getCategoryList()
+          setModalOpen(false);
+          alert(data.message)
+        } else if (data.status === "JWT_INVALID") {
+          alert(data.message);
+          // redirect to login
+        } else {
+          alert(data.message)
+        }
+
+      } else {
+        // api call
+        const serverResponse = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/create-category`,
+          { name, description },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem("pochoToken")}`
+            }
+          }
+        );
+        const data = serverResponse?.data;
+        if (data.status === "SUCCESS") {
+          alert(data.message)
+          await getCategoryList()
+          setModalOpen(false);
+        } else if (data.status === "JWT_INVALID") {
+          alert(data.message);
+          // redirect to login
+        } else {
+          alert(data.message)
+        }
+
+      }
+
+    } catch (error) {
+
+    } finally {
+      setLoader(false)
     }
-    setModalOpen(false);
   };
 
   const deleteCategory = (id: number) => {
     setCategories(categories.filter((cat) => cat.id !== id));
   };
+
+  //get the all created categories on initial load
+
+  async function getCategoryList() {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/get-category-list`, { page: 1, searchString: "" }, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("pochoToken")}`
+        }
+      })
+      if (response.data.status === "SUCCESS") {
+        setCategories(response?.data?.category)
+      } else if (response.data.status === "JWT_INVALID") {
+        alert(response.data.message);
+        // redirect to login
+      } else {
+        alert(response.data.message)
+      }
+
+    } catch (error) {
+      alert(error.message)
+    } finally {
+      setLoader(false)
+    }
+
+  }
+
+  useEffect(() => {
+    getCategoryList()
+  }, [])
 
   return (
     <div className="p-6">
@@ -71,7 +137,7 @@ const CategoriesTab: React.FC = () => {
           onClick={openAddModal}
           className="bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2"
         >
-           <i className="fas fa-plus"></i>
+          <i className="fas fa-plus"></i>
           <span>Add Category</span>
         </button>
       </div>
@@ -84,10 +150,10 @@ const CategoriesTab: React.FC = () => {
             className="bg-white shadow-md p-4 rounded-lg flex flex-col justify-between"
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className="text-3xl text-primary-500">{cat.icon}</div>
+              <div className="text-3xl text-primary-500"><FaBox /></div>
               <div>
-                <h3 className="text-lg font-semibold">{cat.name}</h3>
-                <p className="text-gray-500 text-sm">{cat.description}</p>
+                <h3 className="text-lg font-semibold">{cat?.name}</h3>
+                <p className="text-gray-500 text-sm">{cat?.description}</p>
               </div>
             </div>
             <div className="flex justify-end gap-3">
@@ -139,7 +205,7 @@ const CategoriesTab: React.FC = () => {
                 onClick={handleSave}
                 className="px-4 py-2 rounded bg-primary-500 text-white hover:bg-primary-600 transition"
               >
-                Save
+                {loader ? < Loader /> : "Save"}
               </button>
             </div>
           </div>
