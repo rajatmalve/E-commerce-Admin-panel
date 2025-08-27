@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AddProduct from './AddProduct';
 
 interface ProductsProps {
   searchTerm: string;
@@ -431,7 +432,7 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
       )}
 
       {/* Add/Edit Product Modal */}
-      {showAddModal && (
+      {/* {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-screen overflow-y-auto">
             <div className="flex justify-between items-center p-6 border-b border-gray-200">
@@ -487,23 +488,7 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
                       defaultValue={editingProduct?.sellingPrice.replace('₹', '') || ''}
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Stock Quantity</label>
-                    <input 
-                      type="number" 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent" 
-                      placeholder="0"
-                      defaultValue={editingProduct?.stock || ''}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                      <option>Active</option>
-                      <option>Inactive</option>
-                      <option>Out of Stock</option>
-                    </select>
-                  </div>
+                
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
                     <textarea 
@@ -516,15 +501,16 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
                     <input 
                       type="file" 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent" 
+                      className=" px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent" 
                       multiple 
                       accept="image/*"
                       onChange={handleImagesSelected}
                     />
                     {selectedImageSets.length > 0 && (
-                      <div className="mt-4 space-y-4">
+                      <div className="flex mt-4 space-y-4">
                         {selectedImageSets.map((set) => (
-                          <div key={set.fileName} className="border border-gray-200 rounded-lg p-3">
+                          <div key={set.fileName} className="border border-gray-200 rounded-lg p-3 max-w-[200px]">
+
                             <div className="flex items-center justify-between mb-3">
                               <div className="font-medium text-gray-900 text-sm">{set.fileName}</div>
                               <button
@@ -571,31 +557,7 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
                               <img src={imageAssignments.thumbnail.url} alt="thumbnail-preview" className="mt-3 w-16 h-16 object-cover rounded" />
                             )}
                           </div>
-                          <div className="border border-gray-200 rounded-lg p-3">
-                            <div className="text-sm font-medium text-gray-700 mb-2">Catalog (choose file; sizes auto-generated)</div>
-                            <select
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                              value={imageAssignments.catalog?.fileName || ''}
-                              onChange={(e) => setAssignment('catalog', e.target.value)}
-                            >
-                              <option value="" disabled>Select image</option>
-                              {selectedImageSets.map(s => (
-                                <option key={s.fileName} value={s.fileName}>{s.fileName}</option>
-                              ))}
-                            </select>
-                            {imageAssignments.catalog?.fileName && (
-                              <div className="mt-3">
-                                {(() => {
-                                  const set = selectedImageSets.find(s => s.fileName === imageAssignments.catalog?.fileName);
-                                  if (!set) return null;
-                                  const v = set.variants.find(v => v.width === 256) || set.variants[0];
-                                  return (
-                                    <img src={v.url} alt="catalog-preview" className="w-24 h-24 object-cover rounded" />
-                                  );
-                                })()}
-                              </div>
-                            )}
-                          </div>
+                         
                         </div>
                       </div>
                     )}
@@ -616,7 +578,11 @@ const Products: React.FC<ProductsProps> = ({ searchTerm }) => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
+
+      {
+        showAddModal && <AddProduct setShowAddModal={setShowAddModal} />
+      }
 
       {/* View Product Modal */}
       {showViewModal && viewingProduct && (
