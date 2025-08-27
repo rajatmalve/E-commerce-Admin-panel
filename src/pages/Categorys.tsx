@@ -101,7 +101,6 @@ const CategoriesTab: React.FC = () => {
         }
       }
     } catch (error) {
-
     } finally {
       setLoader(false);
     }
@@ -140,7 +139,6 @@ const CategoriesTab: React.FC = () => {
   async function getCategoryList(isRefresh = false) {
     try {
       if (!isRefresh) setPageLoader(true);
-      const token = localStorage.getItem("pochoToken");
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/admin/get-category-list`,
         { page: 1, searchString: "" },
