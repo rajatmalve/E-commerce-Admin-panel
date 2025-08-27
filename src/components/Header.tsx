@@ -143,14 +143,20 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar, onSearch, onSignOut, o
         return 'bg-blue-50 border-blue-200';
     }
   };
-  useEffect(() => {
+useEffect(() => {
+  try {
     const userDetails = localStorage.getItem("pochoUserDetails");
     if (userDetails) {
-      setUserData(JSON.parse(userDetails))
-    } else {
-
+      const parsed = typeof userDetails === "string" ? JSON.parse(userDetails) : userDetails;
+      setUserData(parsed);
     }
-  }, [])
+  } catch (error) {
+    console.error("Invalid userDetails in localStorage", error);
+    localStorage.removeItem("pochoUserDetails"); // corrupted data hata do
+    setUserData({ name: "" });
+  }
+}, []);
+
 
   return (
     <header className="bg-white border-b border-gray-200 py-3 px-4 lg:py-4 lg:px-6 sticky top-0 z-50 shadow-sm">
