@@ -46,12 +46,20 @@ const CategoriesTab: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      setLoader(true);
-      const token = localStorage.getItem("pochoToken");
-      if (!token) {
-        alert("Not authenticated. Please login again.");
+
+      setLoader(true); 
+      //validation 
+      if (!name.trim()) {
+        alert("Please enter a category name");
         return;
       }
+
+      if (!description.trim()) {
+        alert("Please enter a description");
+        return;
+      }
+
+      setLoader(true)
 
       if (editMode && currentId !== null) {
         const response = await axios.post(
@@ -166,6 +174,7 @@ const CategoriesTab: React.FC = () => {
         <div className="flex justify-center items-center h-screen">
           <div className="loader p-6"></div>
         </div>
+
       ) : (
         <div className="p-6">
           {/* Header */}
