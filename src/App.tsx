@@ -16,6 +16,9 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import './index.css';
 import CategoriesTab from './pages/Categorys';
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -127,7 +130,10 @@ function App() {
           </main>
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </ThemeProvider>
+
+    
   );
 }
 
