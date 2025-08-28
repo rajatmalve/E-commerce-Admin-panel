@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const AddProduct = ({ editingProduct = { mrp: "0", sellingPrice: "0" }, setShowAddModal }) => {
     const [productDetails, setProductDetails] = useState({
@@ -30,7 +31,26 @@ const AddProduct = ({ editingProduct = { mrp: "0", sellingPrice: "0" }, setShowA
 
         // validation
 
+
         try {
+
+            if (!productDetails.name?.trim()) {
+                return toast.error("Product name is required");
+            }
+            if (!productDetails.categoryId) {
+                return toast.error("Please select a category");
+            }
+           
+            if (!productDetails.mrp || isNaN(productDetails.mrp) || productDetails.mrp <= 0) {
+                return toast.error("MRP must be a positive number");
+            }
+             if (!productDetails.price || isNaN(productDetails.price) || productDetails.price <= 0) {
+                return toast.error("Selling price must be a positive number");
+            }
+            if (!files.length) {
+                return toast.error("At least one product image is required");
+            }
+
             const formData = new FormData();
             formData.append("productDetails", JSON.stringify(productDetails));
             files.forEach((ele) => {
@@ -47,14 +67,17 @@ const AddProduct = ({ editingProduct = { mrp: "0", sellingPrice: "0" }, setShowA
                     }
                 }
             );
-            if (response.data.status === "SUCCESS") {
+            if (response?.data?.status === "SUCCESS") {
                 setShowAddModal(false);
-                alert(response.data.message);
+                toast.success(response.data.message);
+            } else if (response?.data?.status === "JWT_INVALID") {
+                      toast.error(response.data.message);
+                      //redirect to login
             } else {
-                alert(response.data.message);
+                 toast.error(response.data.message);
             }
         } catch (error) {
-            alert(error.message);
+            toast.error(error.message);
         }
     }
 
@@ -69,13 +92,13 @@ const AddProduct = ({ editingProduct = { mrp: "0", sellingPrice: "0" }, setShowA
                     }
                 }
             );
-            if (response.data.status === "SUCCESS") {
+            if (response?.data?.status === "SUCCESS") {
                 setCategory(response.data.category);
             } else {
                 setCategory([]);
             }
         } catch (error) {
-            alert(error.message);
+            toast.error(error.message);
         }
     }
 
@@ -86,42 +109,42 @@ const AddProduct = ({ editingProduct = { mrp: "0", sellingPrice: "0" }, setShowA
 
 
     async function getCategoryList(isRefresh = false) {
-    try {
-      if (!isRefresh) setPageLoader(true);
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/admin/get-category-list`,
-        { page: 1, searchString: "" },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("pochoToken")}`,
-          },
+        try {
+            if (!isRefresh) setPageLoader(true);
+            const response = await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/admin/get-category-list`,
+                { page: 1, searchString: "" },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("pochoToken")}`,
+                    },
+                }
+            );
+            if (response?.data?.status === "SUCCESS") {
+                setCategory(response?.data?.category || []);
+            } else if (response.data.status === "JWT_INVALID") {
+
+                toast.error(response.data.message);
+                // redirect to login
+            }
+            else {
+                toast.error(response.data.message);
+            }
+        } catch (error: any) {
+            toast.error(error.message);
+        } finally {
+            if (!isRefresh) setPageLoader(false);
         }
-      );
-      if (response?.data?.status === "SUCCESS") {
-        setCategories(response?.data?.category || []);
-      } else if (response.data.status === "JWT_INVALID") {
-
-        toast.error(response.data.message);
-        // redirect to login
-      }
-      else {
-        toast.error(response.data.message);
-      }
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      if (!isRefresh) setPageLoader(false);
     }
-  }
 
-  useEffect(() => {
-    getCategoryList();
-  }, []);
+    useEffect(() => {
+        getCategoryList();
+    }, []);
 
     return (
 
-        
+
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
             <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-screen overflow-y-auto">
                 <div className="flex justify-between items-center p-6 border-b border-gray-200">
