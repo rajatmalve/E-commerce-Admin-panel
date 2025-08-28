@@ -106,6 +106,8 @@ const AddProduct = ({ editingProduct = { mrp: "0", sellingPrice: "0" }, setShowA
         getCategories();
     }, []);
 
+<<<<<<< HEAD
+=======
 
 
     async function getCategoryList(isRefresh = false) {
@@ -142,6 +144,7 @@ const AddProduct = ({ editingProduct = { mrp: "0", sellingPrice: "0" }, setShowA
         getCategoryList();
     }, []);
 
+>>>>>>> 3d3e8b3e840b16a2e3024aa173099b01cd2120cd
     return (
 
 
