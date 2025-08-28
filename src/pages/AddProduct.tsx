@@ -83,42 +83,6 @@ const AddProduct = ({ editingProduct = { mrp: "0", sellingPrice: "0" }, setShowA
         getCategories();
     }, []);
 
-
-
-    async function getCategoryList(isRefresh = false) {
-    try {
-      if (!isRefresh) setPageLoader(true);
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/admin/get-category-list`,
-        { page: 1, searchString: "" },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("pochoToken")}`,
-          },
-        }
-      );
-      if (response?.data?.status === "SUCCESS") {
-        setCategories(response?.data?.category || []);
-      } else if (response.data.status === "JWT_INVALID") {
-
-        toast.error(response.data.message);
-        // redirect to login
-      }
-      else {
-        toast.error(response.data.message);
-      }
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      if (!isRefresh) setPageLoader(false);
-    }
-  }
-
-  useEffect(() => {
-    getCategoryList();
-  }, []);
-
     return (
 
         
